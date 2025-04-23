@@ -1,0 +1,209 @@
+/* AuthPage.css */
+body {
+  background-color: #1D1616;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  color: #EEEEEE;
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 400px;
+  background: #1D1616;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  color: #EEEEEE;
+  border: 1px solid #8E1616;
+}
+
+.auth-container h2 {
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #D84040;
+}
+
+.auth-container p {
+  color: #bbbbbb;
+  margin-bottom: 20px;
+}
+
+.input-group {
+  position: relative;
+  margin: 15px 0;
+}
+
+.input-group input,
+.input-group select {
+  width: 85%;
+  padding: 10px 10px 10px 35px;
+  background: #2a1d1d;
+  color: #EEEEEE;
+  border: 1px solid #8E1616;
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+.input-group input::placeholder {
+  color: #aaaaaa;
+}
+
+.input-group select {
+  appearance: none;
+  align-items: center;
+  background-image: linear-gradient(45deg, transparent 50%, #D84040 50%), linear-gradient(135deg, #D84040 50%, transparent 50%);
+  background-position: calc(100% - 20px) center, calc(100% - 15px) center;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+
+.input-group svg {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #D84040;
+}
+
+
+.password-input-container {
+  position: relative;
+  width: 100%;
+  margin: 15px 0;
+  background-color: #2a1d1d;
+  border: 1px solid #8E1616;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.password-input-container .left-icon {
+  color: #D84040;
+  margin-right: 8px;
+}
+
+.password-input {
+  flex: 1;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  padding: 12px 10px;
+  color: #aaaaaa;
+  font-size: 16px;
+  padding-left: 30px;
+}
+
+.password-input::placeholder {
+  color: #aaaaaa;
+}
+
+.toggle-icon {
+  color: #D84040;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.left-icon{
+  color: #D84040;
+}
+
+
+.toggle-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #D84040;
+  cursor: pointer;
+}
+
+.action-links {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.action-links a {
+  color: #D84040;
+  text-decoration: none;
+}
+
+.action-links a:hover {
+  text-decoration: underline;
+}
+
+.auth-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #D84040;
+  color: #EEEEEE;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.3s ease;
+}
+
+.auth-btn:hover {
+  background-color: #8E1616;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: #D84040;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: none;
+  font-family: inherit;
+}
+
+.link-button:hover {
+  text-decoration: underline;
+}
+
+.oauth-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.oauth-buttons button {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #8E1616;
+  border-radius: 10px;
+  background: #2a1d1d;
+  color: #EEEEEE;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease;
+}
+
+.oauth-buttons button:hover {
+  background: #3a2525;
+}
+
+.oauth-buttons svg {
+  margin-right: 8px;
+  color: #D84040;
+}
+
+.security-msg {
+  font-size: 12px;
+  color: #bbbbbb;
+  margin-top: 15px;
+}

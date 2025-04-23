@@ -1,0 +1,72 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #1d1616;
+  color: #eeeeee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.payment-container {
+  background: #8e1616;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 400px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+h2,
+h3 {
+  color: #eeeeee;
+}
+
+.auction-summary,
+.payment-methods,
+.transaction-history {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin: 8px 0;
+}
+
+input[type="radio"] {
+  margin-right: 8px;
+}
+
+.pay-button {
+  background: #d84040;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+.pay-button:hover {
+  background: #be3144;
+}
+
+.transaction-history ul {
+  list-style: none;
+  padding: 0;
+}
+
+.transaction-history li {
+  background: #d84040;
+  padding: 8px;
+  margin: 5px 0;
+  border-radius: 5px;
+}
+
+.security-msg {
+  font-size: 12px;
+  margin-top: 10px;
+}

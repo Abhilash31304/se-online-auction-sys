@@ -1,0 +1,82 @@
+/* Bidding History Wrapper */
+.bidding-history-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #09122c; /* Dark navy background */
+  padding: 20px;
+}
+
+/* Main Container */
+.bidding-history-container {
+  width: 90%;
+  max-width: 900px;
+  text-align: center;
+  color: #eeeeee;
+}
+
+/* Card-like Container */
+.bidding-history-card {
+  background: #582727; /* Dark card */
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  margin-top: 10px;
+}
+
+/* Title */
+.bidding-history-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #be3144; /* Red accent */
+}
+
+/* Table Styles */
+.bidding-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.bidding-history-table th {
+  background-color: #872341; /* Deep red */
+  color: white;
+  padding: 14px;
+  text-align: left;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.bidding-history-table td {
+  padding: 12px;
+  text-align: left;
+  font-size: 15px;
+}
+
+.bidding-history-table tr {
+  border-bottom: 1px solid #d84040;
+}
+
+.bidding-history-table tr:nth-child(even) {
+  background-color: rgba(216, 64, 64, 0.2); /* Soft red tint */
+}
+
+.bidding-history-table tr:hover {
+  background-color: #e17564; /* Lighter red hover */
+  color: #09122c; /* Deep blue text */
+  transition: 0.3s;
+}
+
+@media (max-width: 600px) {
+  .bidding-history-container {
+    width: 100%;
+  }
+
+  .bidding-history-table th,
+  .bidding-history-table td {
+    padding: 10px;
+    font-size: 14px;
+  }
+}

@@ -1,0 +1,174 @@
+/* LoginPage.css */
+body {
+  background-color: #f3f4f6;
+  font-family: Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 400px;
+  background: #e17564;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.login-container h2 {
+  color: #8e1616;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.login-container p {
+  color: #1d1616;
+}
+
+/* Input Groups */
+.input-group {
+  position: relative;
+  margin: 15px 0;
+}
+
+.input-group input {
+  width: 85%;
+  padding: 10px 10px 10px 35px;
+  background-color: #eeeeee;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease-in-out;
+}
+
+.input-group input:focus {
+  border-color: #872341;
+  outline: none;
+  box-shadow: 0px 0px 5px rgba(37, 99, 235, 0.5);
+}
+
+.input-group svg {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+}
+
+/* Password Input Container */
+.password-input-container {
+  position: relative;
+  margin: 15px 0;
+}
+
+
+
+.password-input-container input:focus {
+  border-color: #872341;
+  outline: none;
+  box-shadow: 0px 0px 5px rgba(37, 99, 235, 0.5);
+}
+
+.password-input-container svg:first-child { /* Lock icon */
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #D84040;
+}
+
+.toggle-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #D84040;
+}
+
+.action-links {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.action-links a {
+  color: #872341;
+  text-decoration: none;
+}
+
+.action-links a:hover {
+  text-decoration: underline;
+}
+
+/* Login Button */
+.login-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #872341;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.login-btn:hover {
+  background-color: #6d1b32; /* Darker shade for hover */
+  transform: scale(1.05);
+}
+
+/* OAuth Buttons */
+.oauth-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.oauth-buttons button {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s;
+}
+
+.oauth-buttons button:hover {
+  background: #f3f4f6;
+}
+
+.oauth-buttons svg {
+  margin-right: 8px;
+}
+
+/* Make OAuth Buttons Full Width on Mobile */
+@media (max-width: 400px) {
+  .oauth-buttons {
+    flex-direction: column;
+  }
+
+  .oauth-buttons button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+/* Security Message */
+.security-msg {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 10px;
+}

@@ -1,0 +1,74 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #1d1616;
+  color: #eeeeee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.auction-container {
+  max-width: 100%;
+  display: flex;
+  background: #8e1616;
+  padding: 20px;
+  border-radius: 10px;
+  width: 100vw;
+  box-sizing: border-box; /* Include padding and border in the element's total width */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.product-image img {
+  width: 400px;
+  border-radius: 10px;
+}
+
+.product-info {
+  margin-left: 20px;
+  flex: 1;
+}
+
+.auction-details p {
+  font-size: 18px;
+  margin: 5px 0;
+}
+
+.bid-section {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.bid-section input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.bid-section button {
+  background: #d84040;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.bid-section button:hover {
+  background: #be3144;
+}
+
+.bid-history ul {
+  list-style: none;
+  padding: 0;
+}
+
+.bid-history li {
+  background: #d84040;
+  padding: 8px;
+  margin: 5px 0;
+  border-radius: 5px;
+}

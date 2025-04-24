@@ -66,6 +66,18 @@ export default function Dashboard() {
       (category === "All" || auction.category === category)
   );
 
+  // Add new function to handle bid button click
+  const handlePlaceBid = () => {
+    // Check if user is authenticated by looking for a token or user data in localStorage
+    const isAuthenticated = localStorage.getItem('token') || localStorage.getItem('user');
+    
+    if (isAuthenticated) {
+      navigate("/AuctionDetails");
+    } else {
+      navigate("/"); // Navigate to AuthPage if not authenticated
+    }
+  };
+
   return (
     <div className="dashboard-container">
       <header className="top-nav">
@@ -77,7 +89,7 @@ export default function Dashboard() {
           </button>
           <button
             className="nav-clicks"
-            onClick={() => navigate("/UserDashboard")}
+            onClick={() => navigate("/user-dashboard")}
           >
             <FaGavel /> My Auctions
           </button>
@@ -89,14 +101,14 @@ export default function Dashboard() {
           </button>
           <button
             className="nav-clicks"
-            onClick={() => navigate("/UserDashboard")}
+            onClick={() => navigate("/user-dashboard")}
           >
             <FaUser /> Profile
           </button>
         </nav>
         <button
           className="create-auction"
-          onClick={() => navigate("/UserDashboard")}
+          onClick={() => navigate("/user-dashboard")}
         >
           <FaPlus /> Create Auction
         </button>
@@ -133,7 +145,7 @@ export default function Dashboard() {
                 <p>Time Left: {auction.time}</p>
                 <button
                   className="place-bid"
-                  onClick={() => navigate("/AuctionDetails")}
+                  onClick={handlePlaceBid}
                 >
                   Place Bid
                 </button>

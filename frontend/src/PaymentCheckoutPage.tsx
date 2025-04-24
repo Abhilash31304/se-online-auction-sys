@@ -1,30 +1,43 @@
 import { useState } from "react";
 import "./PaymentCheckoutPage.css";
+import { useNavigate } from "react-router-dom";
 
 export default function PaymentCheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState("credit-card");
   const [confirming, setConfirming] = useState(false);
   const [transactionHistory, setTransactionHistory] = useState([
-    { id: 1, item: "Vintage Watch", amount: "$200", status: "Completed" },
+    { id: 1, item: "Antique Vase", amount: "$200", status: "Completed" },
     { id: 2, item: "Gaming Laptop", amount: "$1200", status: "Completed" },
   ]);
 
+  const navigate = useNavigate();
+
   const handlePayment = () => {
     setConfirming(true);
+    
     setTimeout(() => {
       alert("Payment successful!");
+      
       setTransactionHistory([
         ...transactionHistory,
         {
           id: transactionHistory.length + 1,
-          item: "Antique Vase",
-          amount: "$500",
+          item: "Vintage Watch",
+          amount: "$501",
           status: "Completed",
         },
       ]);
+      
       setConfirming(false);
-    }, 2000);
+  
+      // Delay navigation by 5 seconds (5000 ms)
+      setTimeout(() => {
+        navigate("/user-dashboard");
+      }, 3000);
+  
+    }, 2000); // Simulate payment processing time
   };
+  
 
   return (
     <div className="payment-container">
@@ -33,10 +46,10 @@ export default function PaymentCheckoutPage() {
       <div className="auction-summary">
         <h3>Won Auction Summary</h3>
         <p>
-          <strong>Item:</strong> Antique Vase
+          <strong>Item:</strong> Vintage Watch
         </p>
         <p>
-          <strong>Final Bid Price:</strong> $500
+          <strong>Final Bid Price:</strong> $501
         </p>
       </div>
 

@@ -9,17 +9,51 @@ import PaymentCheckoutPage from "./PaymentCheckoutPage";
 import BiddingHistory from "./BiddingHistory";
 import UserInfoForm from "./UserInfoForm";
 
+// Add ProtectedRoute component
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const isAuthenticated = localStorage.getItem('token') || localStorage.getItem('user');
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
+  
+  return children;
+};
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<AuthPage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/auction/:id" element={<AuctionDetails />} />
-        <Route path="/payment" element={<PaymentCheckoutPage />} />
-        <Route path="/user-dashboard" element={<UserDashboard />} />
-        <Route path="/bidding-history" element={<BiddingHistory />} />
+        
+        {/* Protected Routes */}
+        <Route path="/dashboard" element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/AuctionDetails" element={
+          <ProtectedRoute>
+            <AuctionDetails />
+          </ProtectedRoute>
+        } />
+        <Route path="/payment" element={
+          <ProtectedRoute>
+            <PaymentCheckoutPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/user-dashboard" element={
+          <ProtectedRoute>
+            <UserDashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/bidding-history" element={
+          <ProtectedRoute>
+            <BiddingHistory />
+          </ProtectedRoute>
+        } />
+        
         <Route path="/signup" element={<UserInfoForm />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

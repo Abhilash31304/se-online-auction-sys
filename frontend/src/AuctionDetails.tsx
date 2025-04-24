@@ -10,18 +10,31 @@ export default function AuctionDetails() {
     { id: 1, amount: 500, bidder: "Alice" },
     { id: 2, amount: 450, bidder: "Bob" },
   ]);
-  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
+  const [timeLeft, setTimeLeft] = useState(3); // 5 minutes
   const navigate = useNavigate();
+
+  // Add authentication check when component mounts
+  useEffect(() => {
+    const isAuthenticated = localStorage.getItem('token') || localStorage.getItem('user');
+    if (!isAuthenticated) {
+      navigate('/');
+    }
+  }, []);
 
   // Countdown Timer
   useEffect(() => {
     if (timeLeft > 0) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
       return () => clearTimeout(timer);
-    } else if (timeLeft == 0) {
-      navigate("/PaymentCheckoutPage");
+    } else if (timeLeft === 0) {
+      const isAuthenticated = localStorage.getItem('token') || localStorage.getItem('user');
+      if (isAuthenticated) {
+        navigate("/payment");
+      } else {
+        navigate("/");
+      }
     }
-  }, [timeLeft]);
+  }, [timeLeft, navigate]);
 
   // Function to handle bidding
   const handleBid = () => {

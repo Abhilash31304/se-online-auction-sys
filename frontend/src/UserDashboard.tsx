@@ -21,7 +21,7 @@ export default function UserDashboard() {
 
   const wonAuctions = [{ id: 3, title: "Antique Vase", bid: "$500" }];
 
-  const formatPrice = (value) => {
+  const formatPrice = (value: string) => {
     if (!value.startsWith("$")) {
       return `$${value.replace(/[^0-9.]/g, "")}`;
     }
@@ -29,7 +29,7 @@ export default function UserDashboard() {
   };
 
   // Handle Form Submission
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSellingItems([
       ...sellingItems,

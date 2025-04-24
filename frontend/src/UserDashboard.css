@@ -10,6 +10,7 @@ body {
   max-width: 800px;
   box-sizing: border-box;
   width: 100vw;
+  padding-top: 15px;
 }
 
 .profile-section {

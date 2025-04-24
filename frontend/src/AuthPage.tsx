@@ -25,15 +25,26 @@ export default function AuthPage() {
   const handleSubmit = () => {
     if (isSignup) {
       console.log("Signing up with:", { username, email, password, userType });
-      // TODO: handle signup logic
+      // Store user data for new signup
+      localStorage.setItem('user', JSON.stringify({ email, userType }));
+      navigate("/dashboard");
     } else {
-      if (email === "test@gmail.com" && password === "Test1234") {
-        navigate("/Dashboard");
+      const muEmailPattern = /^[a-zA-Z0-9._%+-]+@mahindrauniversity\.edu\.in$/;
+  
+      if (
+        (email === "test@gmail.com" && password === "Test1234") ||
+        (muEmailPattern.test(email) && password === "Test1234")
+      ) {
+        // Store auth data on successful login
+        localStorage.setItem('user', JSON.stringify({ email }));
+        localStorage.setItem('token', 'dummy-token-for-demo');
+        navigate("/dashboard");
       } else {
         alert("Invalid email or password. Please try again.");
       }
     }
   };
+  
 
   return (
     <div className="auth-container">

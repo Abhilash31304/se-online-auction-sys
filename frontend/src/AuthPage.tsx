@@ -12,6 +12,15 @@ import {
 
 import "./AuthPage.css";
 
+function validateEmail(email: string): boolean {
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailPattern.test(email);
+}
+
+function validatePassword(password: string): boolean {
+  return password.length >= 8; // Example validation rule
+}
+
 export default function AuthPage() {
   const [isSignup, setIsSignup] = useState(false);
   const [email, setEmail] = useState("");
@@ -22,29 +31,41 @@ export default function AuthPage() {
 
   const navigate = useNavigate();
 
-  const handleSubmit = () => {
-    if (isSignup) {
-      console.log("Signing up with:", { username, email, password, userType });
-      // Store user data for new signup
-      localStorage.setItem('user', JSON.stringify({ email, userType }));
-      navigate("/dashboard");
-    } else {
-      const muEmailPattern = /^[a-zA-Z0-9._%+-]+@mahindrauniversity\.edu\.in$/;
-  
-      if (
-        (email === "test@gmail.com" && password === "Test1234") ||
-        (muEmailPattern.test(email) && password === "Test1234")
-      ) {
-        // Store auth data on successful login
-        localStorage.setItem('user', JSON.stringify({ email }));
-        localStorage.setItem('token', 'dummy-token-for-demo');
+  const handleSubmit = async () => {
+    try {
+      // Clear sensitive data
+      localStorage.clear();
+
+      if (isSignup) {
+        // Validate email and password
+        if (!validateEmail(email) || !validatePassword(password)) {
+          alert("Invalid email or password format");
+          return;
+        }
+        
+        localStorage.setItem('user', JSON.stringify({ email, userType }));
         navigate("/dashboard");
       } else {
-        alert("Invalid email or password. Please try again.");
+        // Check for Mahindra University test account
+        const isMUTestAccount = 
+          email === "test@gmail.com" && 
+          password === "Test1234";
+          
+        const muEmailPattern = /^[a-zA-Z0-9._%+-]+@mahindrauniversity\.edu\.in$/;
+        
+        if (isMUTestAccount || (muEmailPattern.test(email) && validatePassword(password))) {
+          localStorage.setItem('user', JSON.stringify({ email }));
+          localStorage.setItem('token', 'dummy-token-for-demo');
+          navigate("/dashboard");
+        } else {
+          alert("Invalid credentials. Please check your email and password.");
+        }
       }
+    } catch (error) {
+      console.error('Auth error:', error);
+      alert("Authentication failed. Please try again.");
     }
   };
-  
 
   return (
     <div className="auth-container">
@@ -86,8 +107,6 @@ export default function AuthPage() {
     {showPassword ? <FaEyeSlash /> : <FaEye />}
   </span>
 </div>
-
-
 
       {isSignup && (
         <div className="input-group">

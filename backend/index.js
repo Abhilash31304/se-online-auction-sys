@@ -1,15 +1,29 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const csrf = require('csurf');
 require('dotenv').config();
 
 const app = express();
-// Configure CORS for frontend
+
+// Security middlewares
+app.use(helmet());
 app.use(cors({
-  origin: 'http://localhost:5173', // Vite's default port
+  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
   credentials: true
 }));
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
+app.use('/api/', limiter);
+
 app.use(express.json());
+app.use(csrf({ cookie: true }));
 
 // Connect MongoDB
 mongoose.connect(process.env.MONGO_URI, {
@@ -26,6 +40,11 @@ app.get('/', (req, res) => {
 // Auction Routes (later)
 const auctionRoutes = require('./routes/auctionRoutes');
 app.use('/api/auctions', auctionRoutes);
+
+// Error Handler (must be after routes)
+const errorHandler = require('./middleware/errorHandler');
+app.use(errorHandler);
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

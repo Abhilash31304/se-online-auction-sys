@@ -1,31 +1,43 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import "./BiddingHistory.css";
 
 const BiddingHistory = () => {
-  const bids = [
+  interface Bid {
+    id: string;
+    auction: string;
+    amount: number;
+    bidder: string;
+    time: string;
+    status: string;
+  }
+  
+  const [bids, setBids] = useState<Bid[]>([]);
+
+  const defaultBids = [
     {
-      id: 1,
-      auction: "Vintage Watch",
-      amount: "$120",
-      bidder: "Alice",
-      time: "2025-03-20 14:32",
+      id: "default1",
+      auction: "Sample Auction 1",
+      amount: "$100",
+      bidder: "Example User",
+      time: new Date().toLocaleString(),
+      status: "Active"
     },
     {
-      id: 2,
-      auction: "Gaming Laptop",
-      amount: "$950",
-      bidder: "Bob",
-      time: "2025-03-19 16:45",
-    },
-    {
-      id: 3,
-      auction: "Art Piece",
-      amount: "$450",
-      bidder: "Charlie",
-      time: "2025-03-18 11:20",
-    },
+      id: "default2", 
+      auction: "Sample Auction 2",
+      amount: "$200",
+      bidder: "Example User",
+      time: new Date().toLocaleString(),
+      status: "Active"
+    }
   ];
+
+  useEffect(() => {
+    const savedHistory = localStorage.getItem('biddingHistory');
+    // Combine default bids with any saved bids
+    const savedBids = savedHistory ? JSON.parse(savedHistory) : [];
+    setBids([...defaultBids, ...savedBids]);
+  }, []);
 
   return (
     <div className="bidding-history-wrapper">
@@ -40,6 +52,7 @@ const BiddingHistory = () => {
                   <th>Bid Amount</th>
                   <th>Bidder</th>
                   <th>Timestamp</th>
+                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -49,6 +62,7 @@ const BiddingHistory = () => {
                     <td>{bid.amount}</td>
                     <td>{bid.bidder}</td>
                     <td>{bid.time}</td>
+                    <td>{bid.status}</td>
                   </tr>
                 ))}
               </tbody>

@@ -1,5 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./UserDashboard.css";
+
+interface WonAuction {
+  id: number;
+  title: string;
+  bid: string;
+  image: string;
+  category: string;
+}
 
 export default function UserDashboard() {
   const [showForm, setShowForm] = useState(false);
@@ -15,11 +23,37 @@ export default function UserDashboard() {
   ]);
 
   const myBids = [
-    { id: 1, title: "Vintage Watch", bid: "$200", status: "Active" },
+    { id: 1, title: "Vintage Watch", bid: "$501", status: "Active" },
     { id: 2, title: "Gaming Laptop", bid: "$1200", status: "Completed" },
   ];
 
-  const wonAuctions = [{ id: 3, title: "Antique Vase", bid: "$500" }];
+  const [wonAuctions, setWonAuctions] = useState<WonAuction[]>([]);
+
+  // Load won auctions from localStorage on mount and when updated
+  useEffect(() => {
+    // Get existing won auctions
+    const savedWonAuctions = localStorage.getItem('wonAuctions');
+    const initialWonAuctions = savedWonAuctions ? JSON.parse(savedWonAuctions) : [];
+    
+    // Check for newly completed auctions
+    const completedAuctions = localStorage.getItem('completedAuctions');
+    if (completedAuctions) {
+      const completed = JSON.parse(completedAuctions);
+      const updatedWonAuctions = [...initialWonAuctions, ...completed];
+      setWonAuctions(updatedWonAuctions);
+      
+      // Save updated won auctions and clear completed
+      localStorage.setItem('wonAuctions', JSON.stringify(updatedWonAuctions));
+      localStorage.removeItem('completedAuctions');
+    } else {
+      setWonAuctions(initialWonAuctions);
+    }
+  }, []);
+
+  // Update localStorage whenever won auctions change
+  useEffect(() => {
+    localStorage.setItem('wonAuctions', JSON.stringify(wonAuctions));
+  }, [wonAuctions]);
 
   const formatPrice = (value: string) => {
     if (!value.startsWith("$")) {
@@ -49,7 +83,7 @@ export default function UserDashboard() {
       <div className="profile-section">
         <img src="pics/IMG_20220928_234425_624.jpg" alt="User" className="profile-pic" />
         <h2>Abhilash</h2>
-        <p>abhilash@gmail.com</p>
+        <p>se22uari083@mahindrauniversity.edu.in</p>
       </div>
 
       {/* Dashboard Sections */}
@@ -69,13 +103,14 @@ export default function UserDashboard() {
           ))}
         </div>
 
-        {/* Won Auctions Section */}
+        {/* Updated Won Auctions Section */}
         <div className="dashboard-card">
           <h3>Won Auctions</h3>
           {wonAuctions.map((item) => (
             <div key={item.id} className="auction-item">
               <span>{item.title}</span>
               <span>{item.bid}</span>
+              <span className="status">{item.category}</span>
             </div>
           ))}
         </div>

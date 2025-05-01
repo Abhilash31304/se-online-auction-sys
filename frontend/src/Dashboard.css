@@ -89,7 +89,7 @@ body {
   gap: 10px;
   margin-bottom: 20px;
   flex-wrap: wrap; /* Add padding to avoid overlap with fixed nav */
-  padding-top: 1070px;
+  padding-top: 1970px;
 }
 
 .search-filter input,

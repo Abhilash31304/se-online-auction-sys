@@ -1,4 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+interface Auction {
+  id: number;
+  title: string;
+  bid: string;
+  time: string;
+  image: string;
+  category: string;
+}
 import { FaGavel, FaUser, FaHistory, FaHome, FaPlus } from "react-icons/fa";
 import "./Dashboard.css";
 import { useNavigate } from "react-router-dom";
@@ -58,23 +67,54 @@ export default function Dashboard() {
       image: "pics/download (5).jpeg",
       category: "Miscellaneous",
     },
+    {
+      id: 7,
+      title: "Harry Potter Books",
+      bid: "$500",
+      time: "5h 10m",
+      image: "pics/download (6).jpeg",
+      category: "Collectibles",
+    },
+    {
+      id: 8,
+      title: "Sneakers",
+      bid: "$800",
+      time: "5h 10m",
+      image: "pics/download (7).jpeg",
+      category: "Collectibles",
+    },
+    {
+      id: 9,
+      title: "Old Coins",
+      bid: "$150",
+      time: "5h 10m",
+      image: "pics/download (8).jpeg",
+      category: "Collectibles",
+    },
   ];
 
-  const filteredAuctions = auctions.filter(
+  const [availableAuctions, setAvailableAuctions] = useState(auctions);
+
+  useEffect(() => {
+    // Always use the initial auctions array
+    setAvailableAuctions(auctions);
+  }, []);
+
+  const filteredAuctions = availableAuctions.filter(
     (auction) =>
       auction.title.toLowerCase().includes(search.toLowerCase()) &&
       (category === "All" || auction.category === category)
   );
 
-  // Add new function to handle bid button click
-  const handlePlaceBid = () => {
-    // Check if user is authenticated by looking for a token or user data in localStorage
+  const handlePlaceBid = (auction: Auction) => {
     const isAuthenticated = localStorage.getItem('token') || localStorage.getItem('user');
     
     if (isAuthenticated) {
+      // Store the selected auction details in localStorage
+      localStorage.setItem('selectedAuction', JSON.stringify(auction));
       navigate("/AuctionDetails");
     } else {
-      navigate("/"); // Navigate to AuthPage if not authenticated
+      navigate("/");
     }
   };
 
@@ -145,7 +185,7 @@ export default function Dashboard() {
                 <p>Time Left: {auction.time}</p>
                 <button
                   className="place-bid"
-                  onClick={handlePlaceBid}
+                  onClick={() => handlePlaceBid(auction)}
                 >
                   Place Bid
                 </button>

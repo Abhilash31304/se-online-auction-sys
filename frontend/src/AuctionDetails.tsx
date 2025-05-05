@@ -15,7 +15,7 @@ export default function AuctionDetails() {
   const [highestBid, setHighestBid] = useState(0);
   const [bidAmount, setBidAmount] = useState("");
   const [bidHistory, setBidHistory] = useState<{ id: number; amount: number; bidder: string }[]>([]);
-  const [timeLeft, setTimeLeft] = useState(30);
+  const [timeLeft, setTimeLeft] = useState(300);
   const navigate = useNavigate();
 
   useEffect(() => {

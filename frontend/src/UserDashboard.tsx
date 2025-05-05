@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./UserDashboard.css";
+import { saveNewAuction } from './utils/auctionUtils';
+import { FaHome } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 interface WonAuction {
   id: number;
@@ -10,6 +13,7 @@ interface WonAuction {
 }
 
 export default function UserDashboard() {
+  const navigate = useNavigate();
   const [showForm, setShowForm] = useState(false);
   const [newItem, setNewItem] = useState({
     title: "",
@@ -28,6 +32,50 @@ export default function UserDashboard() {
   ];
 
   const [wonAuctions, setWonAuctions] = useState<WonAuction[]>([]);
+
+  const [isDragging, setIsDragging] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      handleImageSelect(file);
+    }
+  };
+
+  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleImageSelect(file);
+    }
+  };
+
+  const handleImageSelect = (file: File) => {
+    setSelectedImage(file);
+    const imageUrl = URL.createObjectURL(file);
+    setPreviewUrl(imageUrl);
+    setNewItem(prev => ({ ...prev, image: imageUrl }));
+  };
+
+  const removeImage = () => {
+    setSelectedImage(null);
+    setPreviewUrl(null);
+    setNewItem(prev => ({ ...prev, image: "" }));
+  };
 
   // Load won auctions from localStorage on mount and when updated
   useEffect(() => {
@@ -65,20 +113,43 @@ export default function UserDashboard() {
   // Handle Form Submission
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSellingItems([
-      ...sellingItems,
-      {
-        ...newItem,
-        id: sellingItems.length + 1,
-        price: formatPrice(newItem.price),
-      },
-    ]); // Ensure price is formatted
+    const formattedPrice = formatPrice(newItem.price);
+    
+    // Create object URL for the selected image if it exists
+    let imageUrl = newItem.image;
+    if (selectedImage) {
+      imageUrl = URL.createObjectURL(selectedImage);
+    }
+    
+    // Save to selling items
+    const sellingItem = {
+      ...newItem,
+      id: sellingItems.length + 1,
+      price: formattedPrice,
+      image: imageUrl
+    };
+    setSellingItems([...sellingItems, sellingItem]);
+    
+    // Save to global auctions with endTime
+    saveNewAuction({
+      ...newItem,
+      price: formattedPrice,
+      image: imageUrl,
+      endTime: new Date(Date.now() + 24 * 60 * 60 * 1000) // Add 24 hours from now
+    });
+    
     setShowForm(false);
-    setNewItem({ title: "", price: "", image: "", status: "Pending" }); // Reset form fields
+    setNewItem({ title: "", price: "", image: "", status: "Pending" });
+    setSelectedImage(null);
+    setPreviewUrl(null);
   };
 
   return (
     <div className="dashboard-container">
+      <button className="back-home-btn" onClick={() => navigate('/dashboard')}>
+        <FaHome /> Back to Home
+      </button>
+      
       {/* Profile Section */}
       <div className="profile-section">
         <img src="pics/IMG_20220928_234425_624.jpg" alt="User" className="profile-pic" />
@@ -159,15 +230,33 @@ export default function UserDashboard() {
               }
               required
             />
-            <input
-              type="text"
-              placeholder="Image URL"
-              value={newItem.image}
-              onChange={(e) =>
-                setNewItem({ ...newItem, image: e.target.value })
-              }
-              required
-            />
+            
+            <div
+              className={`drag-drop-zone ${isDragging ? 'dragging' : ''}`}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              onClick={() => document.getElementById('file-input')?.click()}
+            >
+              <input
+                type="file"
+                id="file-input"
+                accept="image/*"
+                onChange={handleFileInput}
+                style={{ display: 'none' }}
+              />
+              {previewUrl ? (
+                <div>
+                  <img src={previewUrl} alt="Preview" className="preview-image" />
+                  <button type="button" className="remove-image" onClick={removeImage}>
+                    Remove Image
+                  </button>
+                </div>
+              ) : (
+                <p>Drag and drop an image here or click to select</p>
+              )}
+            </div>
+
             <button type="submit">Submit</button>
             <button type="button" onClick={() => setShowForm(false)}>
               Cancel

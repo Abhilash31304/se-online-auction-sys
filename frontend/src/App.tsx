@@ -9,7 +9,6 @@ import PaymentCheckoutPage from "./PaymentCheckoutPage";
 import BiddingHistory from "./BiddingHistory";
 import UserInfoForm from "./UserInfoForm";
 
-// Add ProtectedRoute component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const isAuthenticated = localStorage.getItem('token') || localStorage.getItem('user');
   
@@ -26,8 +25,6 @@ function App() {
       <Routes>
         <Route path="/" element={<AuthPage />} />
         <Route path="/login" element={<Login />} />
-        
-        {/* Protected Routes */}
         <Route path="/dashboard" element={
           <ProtectedRoute>
             <Dashboard />
@@ -53,7 +50,6 @@ function App() {
             <BiddingHistory />
           </ProtectedRoute>
         } />
-        
         <Route path="/signup" element={<UserInfoForm />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

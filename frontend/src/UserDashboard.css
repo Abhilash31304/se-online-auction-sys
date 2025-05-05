@@ -133,3 +133,58 @@ body {
   background: gray;
   color: white;
 }
+
+.drag-drop-zone {
+  border: 2px dashed #d84040;
+  border-radius: 5px;
+  padding: 20px;
+  text-align: center;
+  margin: 10px 0;
+  background-color: rgba(216, 64, 64, 0.1);
+  cursor: pointer;
+}
+
+.drag-drop-zone.dragging {
+  background-color: rgba(216, 64, 64, 0.2);
+  border-color: #8e1616;
+}
+
+.preview-image {
+  max-width: 200px;
+  max-height: 200px;
+  margin: 10px auto;
+  display: block;
+  border-radius: 5px;
+}
+
+.remove-image {
+  background: #d84040;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.remove-image:hover {
+  background: #8e1616;
+}
+
+.back-home-btn {
+  background: #872341;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.3s ease;
+}
+
+.back-home-btn:hover {
+  background: #6d1b32;
+}

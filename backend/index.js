@@ -37,9 +37,12 @@ app.get('/', (req, res) => {
   res.send("Backend is working!");
 });
 
-// Auction Routes (later)
+// Routes
 const auctionRoutes = require('./routes/auctionRoutes');
+const bidRoutes = require('./routes/bidRoutes');
+
 app.use('/api/auctions', auctionRoutes);
+app.use('/api/bids', bidRoutes);
 
 // Error Handler (must be after routes)
 const errorHandler = require('./middleware/errorHandler');

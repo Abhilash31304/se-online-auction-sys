@@ -20,7 +20,7 @@ const BiddingHistory = () => {
       amount: "$100",
       bidder: "Example User",
       time: new Date().toLocaleString(),
-      status: "Active"
+      status: "Won"
     },
     {
       id: "default2", 
@@ -28,7 +28,7 @@ const BiddingHistory = () => {
       amount: "$200",
       bidder: "Example User",
       time: new Date().toLocaleString(),
-      status: "Active"
+      status: "Won"
     }
   ];
 

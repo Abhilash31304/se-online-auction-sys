@@ -72,7 +72,7 @@ vs-se-pro/
 🔒 Authentication
 Local authentication with email/password
 Test account available:
-Email: test@gmail.com
+Email: test@gmail.com(or any mu email_id)
 Password: Test1234
 
 Usage

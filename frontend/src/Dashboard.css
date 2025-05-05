@@ -1,7 +1,7 @@
 /* Base styles */
 body {
   font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
+  background-color: #1d1616;
   min-height: 100vh; /* Ensure body is at least the height of the viewport */
   width: 100%;
   margin: 0;
@@ -9,17 +9,19 @@ body {
   display: flex;
   flex-direction: column;
   color: #eeeeee;
+  overflow-x: hidden;
 }
 
 /* Container */
 .dashboard-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Ensure container is at least the height of the viewport */
+  min-height: 100vh;
   width: 100%;
+  position: relative;
+  background-color: #1d1616;
   box-sizing: border-box;
   margin: 0;
-  padding-top: 1070px;
 }
 
 /* Top Navigation */
@@ -34,13 +36,15 @@ body {
   position: fixed;
   top: 0;
   left: 0;
+  right: 0;
   z-index: 1000;
+  height: 60px; /* Fixed height for nav */
 }
 
 /* Logo */
 #main-logo {
-  width: 150px;
-  height: auto;
+  width: 100px;
+  height: 70px;
 }
 
 /* Nav Links */
@@ -76,22 +80,34 @@ body {
 
 /* Main Content */
 .main-content {
-  flex-grow: 1;
-  padding: 10px;
+  flex: 1;
+  padding: 120px 20px 20px; /* Increased top padding */
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto; /* Add some top padding to avoid overlap with fixed nav */
+  max-width: 100%; /* Changed from 1200px to full width */
+  margin: 0 auto;
+  min-height: calc(100vh - 60px);
+  overflow-y: auto;
 }
 
 /* Search & Filter */
 .search-filter {
   display: flex;
   gap: 10px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+  padding: 15px;
+  position: fixed; /* Changed from sticky to fixed */
+  top: 60px; /* Aligned with nav */
+  left: 0;
+  right: 0;
+  z-index: 99;
+  background: #1d1616;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
   margin-bottom: 20px;
-  flex-wrap: wrap; /* Add padding to avoid overlap with fixed nav */
-  padding-top: 1070px;
 }
 
+/* Search & Filter Inputs */
 .search-filter input,
 .search-filter select {
   padding: 10px;
@@ -101,15 +117,22 @@ body {
 
 /* Auction List */
 .auction-list-horizontal {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
-  justify-content: center;
-  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 30px;
+  width: 95%;
+  margin: 120px auto 0;
+  padding: 20px;
+  padding-top: 1900px; /* Adjusted to avoid overlap with fixed search/filter */
+  box-sizing: border-box;
+  position: relative;
+  top: 60px;
 }
 
 /* Auction Card */
 .auction-card {
+  flex: 0 0 300px; /* Fixed width for each card */
   background: white;
   color: black;
   padding: 15px;
@@ -120,7 +143,9 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 400px;
+  height: auto;
+  min-height: 400px;
+  margin-bottom: 20px;
 }
 
 .auction-card h3 {
@@ -164,4 +189,12 @@ body {
 
 .auction-card .place-bid:hover {
   background: #be3144;
+}
+
+/* Footer */
+.site-footer {
+  margin-top: auto;
+  padding: 20px;
+  background: #872341;
+  text-align: center;
 }

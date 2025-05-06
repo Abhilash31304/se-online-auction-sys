@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaGavel, FaUser, FaHistory, FaHome, FaPlus } from "react-icons/fa";
-import { getAuctions } from './utils/auctionUtils';
+import apiService from './utils/api';
 import "./Dashboard.css";
 
 interface Auction {
@@ -14,41 +14,16 @@ interface Auction {
   endTime?: Date;
 }
 
-const useCountdown = (endTime: Date) => {
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-
-  function calculateTimeLeft() {
-    const difference = new Date(endTime).getTime() - new Date().getTime();
-    if (difference <= 0) {
-      return { hours: 0, minutes: 0, seconds: 0 };
-    }
-
-    return {
-      hours: Math.floor(difference / (1000 * 60 * 60)),
-      minutes: Math.floor((difference / 1000 / 60) % 60),
-      seconds: Math.floor((difference / 1000) % 60)
-    };
-  }
-
-  useEffect(() => {
-    if (!endTime) return;
-
-    const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [endTime]);
-
-  return timeLeft;
-};
-
 export default function Dashboard() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [availableAuctions, setAvailableAuctions] = useState<Auction[]>([]);
   const navigate = useNavigate();
 
-  const auctions = [
+  // Initial dummy data
+  const initialAuctions: Auction[] = [
     {
       id: 1,
       title: "Vintage Watch",
@@ -56,102 +31,56 @@ export default function Dashboard() {
       time: "2h 30m",
       image: "pics/download.jpeg",
       category: "Collectibles",
-      endTime: new Date(Date.now() + 5 * 60 * 1000),
+      endTime: new Date(Date.now() + 2 * 60 * 60 * 1000),
     },
     {
-      id: 2,
-      title: "Antique Vase",
-      bid: "$500",
-      time: "1h 15m",
-      image: "pics/download (1).jpeg",
-      category: "Collectibles",
-      endTime: new Date(Date.now() + 1 * 60 * 60 * 1000 + 15 * 60 * 1000),
-    },
-    {
-      id: 3,
-      title: "Gaming Laptop",
-      bid: "$1200",
-      time: "5h 10m",
-      image: "pics/download (2).jpeg",
-      category: "Electronics",
-      endTime: new Date(Date.now() + 5 * 60 * 60 * 1000 + 10 * 60 * 1000),
-    },
-    {
-      id: 4,
-      title: "Phone",
-      bid: "$1200",
-      time: "5h 10m",
-      image: "pics/download (3).jpeg",
-      category: "Electronics",
-      endTime: new Date(Date.now() + 5 * 60 * 60 * 1000 + 10 * 60 * 1000),
-    },
-    {
-      id: 5,
-      title: "CPU",
-      bid: "$1200",
-      time: "5h 10m",
-      image: "pics/download (4).jpeg",
-      category: "Electronics",
-      endTime: new Date(Date.now() + 5 * 60 * 60 * 1000 + 10 * 60 * 1000),
-    },
-    {
-      id: 6,
-      title: "Water Bottle",
-      bid: "$20",
-      time: "5h 10m",
-      image: "pics/download (5).jpeg",
-      category: "Miscellaneous",
-      endTime: new Date(Date.now() + 5 * 60 * 60 * 1000 + 10 * 60 * 1000),
-    },
-    {
-      id: 7,
-      title: "Harry Potter Books",
-      bid: "$500",
-      time: "5h 10m",
-      image: "pics/download (6).jpeg",
-      category: "Collectibles",
-      endTime: new Date(Date.now() + 5 * 60 * 60 * 1000 + 10 * 60 * 1000),
-    },
-    {
-      id: 8,
-      title: "Sneakers",
+      id: 1,
+      title: "Laptop",
       bid: "$800",
-      time: "5h 10m",
-      image: "pics/download (7).jpeg",
+      time: "12h 30m",
+      image: "pics/download (2).jpeg",
       category: "Collectibles",
-      endTime: new Date(Date.now() + 5 * 60 * 60 * 1000 + 10 * 60 * 1000),
-    },
-    {
-      id: 9,
-      title: "Old Coins",
-      bid: "$150",
-      time: "5h 10m",
-      image: "pics/download (8).jpeg",
-      category: "Collectibles",
-      endTime: new Date(Date.now() + 5 * 60 * 60 * 1000 + 10 * 60 * 1000),
-    },
+      endTime: new Date(Date.now() + 2 * 60 * 60 * 1000),
+    }
   ];
 
-  const [availableAuctions, setAvailableAuctions] = useState(auctions);
-
   useEffect(() => {
-    const isAuthenticated = localStorage.getItem('token') || localStorage.getItem('user');
-    if (!isAuthenticated) {
+    const token = localStorage.getItem('token');
+    if (!token) {
       navigate('/');
       return;
     }
 
-    try {
-      const userAuctions = getAuctions();
-      const allAuctions = [...auctions, ...userAuctions].map(auction => ({
-        ...auction,
-        endTime: auction.endTime instanceof Date ? auction.endTime : new Date(auction.endTime)
-      }));
-      setAvailableAuctions(allAuctions);
-    } catch (error) {
-      console.error('Error loading auctions:', error);
-      setAvailableAuctions(auctions);
-    }
+    // Set initial data first
+    setAvailableAuctions(initialAuctions);
+    
+    // Then fetch from API
+    const fetchAuctions = async () => {
+      try {
+        const response = await apiService.getAllAuctions();
+        console.log('API Response:', response);
+        
+        if (response) {
+          const apiAuctions = response.map((auction: any) => ({
+            id: auction._id || Date.now(),
+            title: auction.title || 'Untitled',
+            bid: `$${auction.currentBid || 0}`,
+            time: "2h 30m",
+            image: auction.images?.[0]?.url || "pics/default.jpeg",
+            category: auction.category || "Miscellaneous",
+            endTime: new Date(auction.endTime || Date.now() + 24 * 60 * 60 * 1000)
+          }));
+          setAvailableAuctions([...initialAuctions, ...apiAuctions]);
+        }
+      } catch (error) {
+        console.error('Error fetching auctions:', error);
+        setError('Failed to load auctions');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAuctions();
   }, [navigate]);
 
   const filteredAuctions = availableAuctions.filter(
@@ -171,10 +100,8 @@ export default function Dashboard() {
     }
   };
 
-  const formatTime = (hours: number, minutes: number, seconds: number) => {
-    if (hours <= 0 && minutes <= 0 && seconds <= 0) return "Auction ended";
-    return `${hours}h ${minutes}m ${seconds}s`;
-  };
+  if (loading) return <div className="loading">Loading...</div>;
+  if (error) return <div className="error">{error}</div>;
 
   return (
     <div className="dashboard-container">
@@ -234,26 +161,28 @@ export default function Dashboard() {
 
         <div className="auction-list-horizontal">
           {filteredAuctions.length > 0 ? (
-            filteredAuctions.map((auction) => {
-              const timeLeft = useCountdown(auction.endTime || new Date());
-              return (
-                <div key={auction.id} className="auction-card">
-                  <img src={auction.image} alt={auction.title} />
-                  <h3>{auction.title}</h3>
-                  <p>Highest Bid: {auction.bid}</p>
-                  <p>Time Left: {formatTime(timeLeft.hours, timeLeft.minutes, timeLeft.seconds)}</p>
-                  <button
-                    className="place-bid"
-                    onClick={() => handlePlaceBid(auction)}
-                    disabled={timeLeft.hours <= 0 && timeLeft.minutes <= 0 && timeLeft.seconds <= 0}
-                  >
-                    {timeLeft.hours <= 0 && timeLeft.minutes <= 0 && timeLeft.seconds <= 0 
-                      ? "Auction Ended" 
-                      : "Place Bid"}
-                  </button>
-                </div>
-              );
-            })
+            filteredAuctions.map((auction) => (
+              <div key={auction.id} className="auction-card">
+                <img 
+                  src={auction.image}
+                  alt={auction.title}
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.onerror = null;
+                    target.src = "pics/default.jpeg";
+                  }}
+                />
+                <h3>{auction.title}</h3>
+                <p>Highest Bid: {auction.bid}</p>
+                <p>Time Left: {auction.time}</p>
+                <button
+                  className="place-bid"
+                  onClick={() => handlePlaceBid(auction)}
+                >
+                  Place Bid
+                </button>
+              </div>
+            ))
           ) : (
             <p style={{ color: "white", textAlign: "center", width: "100%" }}>
               No auctions found.

@@ -124,7 +124,7 @@ body {
   width: 95%;
   margin: 120px auto 0;
   padding: 20px;
-  padding-top: 1900px; /* Adjusted to avoid overlap with fixed search/filter */
+  padding-top: 2300px; 
   box-sizing: border-box;
   position: relative;
   top: 60px;
@@ -132,7 +132,7 @@ body {
 
 /* Auction Card */
 .auction-card {
-  flex: 0 0 300px; /* Fixed width for each card */
+  flex: 0 0 300px; 
   background: white;
   color: black;
   padding: 15px;
@@ -197,4 +197,23 @@ body {
   padding: 20px;
   background: #872341;
   text-align: center;
+}
+
+/* Loading and Error Styles */
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: #eeeeee;
+  font-size: 20px;
+  margin-top: 100px;
+}
+
+.error {
+  text-align: center;
+  padding: 20px;
+  color: #d84040;
+  font-size: 20px;
+  margin-top: 100px;
+  background: rgba(216, 64, 64, 0.1);
+  border-radius: 8px;
 }

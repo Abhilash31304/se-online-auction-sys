@@ -115,7 +115,7 @@ export default function PaymentCheckoutPage() {
           <input
             type="radio"
             name="payment"
-            value="paypal"
+            value="PhonePe"
             checked={paymentMethod === "paypal"}
             onChange={() => setPaymentMethod("paypal")}
           />
@@ -125,7 +125,7 @@ export default function PaymentCheckoutPage() {
           <input
             type="radio"
             name="payment"
-            value="stripe"
+            value="Paytm"
             checked={paymentMethod === "stripe"}
             onChange={() => setPaymentMethod("stripe")}
           />

@@ -3,6 +3,7 @@ import "./UserDashboard.css";
 import { saveNewAuction } from './utils/auctionUtils';
 import { FaHome } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import apiService from './utils/api';
 
 interface WonAuction {
   id: number;
@@ -111,37 +112,36 @@ export default function UserDashboard() {
   };
 
   // Handle Form Submission
-  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formattedPrice = formatPrice(newItem.price);
     
-    // Create object URL for the selected image if it exists
-    let imageUrl = newItem.image;
-    if (selectedImage) {
-      imageUrl = URL.createObjectURL(selectedImage);
+    try {
+      const formData = new FormData();
+      formData.append('title', newItem.title);
+      formData.append('startingPrice', newItem.price);
+      if (selectedImage) {
+        formData.append('image', selectedImage);
+      }
+      
+      const response = await apiService.createAuction(formData);
+      
+      if (response) {
+        setSellingItems([...sellingItems, {
+          id: response._id,
+          title: response.title,
+          price: `$${response.startingPrice}`,
+          status: response.status
+        }]);
+      }
+      
+      setShowForm(false);
+      setNewItem({ title: "", price: "", image: "", status: "Pending" });
+      setSelectedImage(null);
+      setPreviewUrl(null);
+    } catch (error) {
+      console.error('Error creating auction:', error);
+      alert('Failed to create auction. Please try again.');
     }
-    
-    // Save to selling items
-    const sellingItem = {
-      ...newItem,
-      id: sellingItems.length + 1,
-      price: formattedPrice,
-      image: imageUrl
-    };
-    setSellingItems([...sellingItems, sellingItem]);
-    
-    // Save to global auctions with endTime
-    saveNewAuction({
-      ...newItem,
-      price: formattedPrice,
-      image: imageUrl,
-      endTime: new Date(Date.now() + 24 * 60 * 60 * 1000) // Add 24 hours from now
-    });
-    
-    setShowForm(false);
-    setNewItem({ title: "", price: "", image: "", status: "Pending" });
-    setSelectedImage(null);
-    setPreviewUrl(null);
   };
 
   return (

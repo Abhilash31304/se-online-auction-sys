@@ -9,6 +9,8 @@ import {
   FaEyeSlash,
   FaEye
 } from "react-icons/fa";
+import apiService from './utils/api';
+import axios from 'axios';
 
 import "./AuthPage.css";
 
@@ -33,37 +35,28 @@ export default function AuthPage() {
 
   const handleSubmit = async () => {
     try {
-      // Clear sensitive data
-      localStorage.clear();
-
-      if (isSignup) {
-        // Validate email and password
-        if (!validateEmail(email) || !validatePassword(password)) {
-          alert("Invalid email or password format");
-          return;
-        }
-        
-        localStorage.setItem('user', JSON.stringify({ email, userType }));
-        navigate("/dashboard");
-      } else {
-        // Check for Mahindra University test account
-        const isMUTestAccount = 
-          email === "test@gmail.com" && 
-          password === "Test1234";
-          
-        const muEmailPattern = /^[a-zA-Z0-9._%+-]+@mahindrauniversity\.edu\.in$/;
-        
-        if (isMUTestAccount || (muEmailPattern.test(email) && validatePassword(password))) {
-          localStorage.setItem('user', JSON.stringify({ email }));
-          localStorage.setItem('token', 'dummy-token-for-demo');
-          navigate("/dashboard");
-        } else {
-          alert("Invalid credentials. Please check your email and password.");
-        }
+      // For test user login
+      if (email === 'test@gmail.com' && password === 'Test1234') {
+        localStorage.setItem('user', JSON.stringify({ email }));
+        localStorage.setItem('token', 'test-token');
+        navigate("/dashboard", { replace: true }); // Add replace: true
+        return;
       }
-    } catch (error) {
+
+      if (!validateEmail(email) || !validatePassword(password)) {
+        alert("Please enter valid email and password");
+        return;
+      }
+
+      const response = await apiService.login({ email, password });
+      if (response) {
+        localStorage.setItem('user', JSON.stringify({ email }));
+        localStorage.setItem('token', response.token || 'token');
+        navigate("/dashboard", { replace: true }); // Add replace: true
+      }
+    } catch (error: any) {
       console.error('Auth error:', error);
-      alert("Authentication failed. Please try again.");
+      alert(error.message || "Login failed. Please try again.");
     }
   };
 
